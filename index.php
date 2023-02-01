@@ -1,7 +1,29 @@
 <html>
 <head>
     <title>Ajax Request</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
+    <link rel="stylesheet" href="toastr/toastr.min.css">
     <script type="text/javascript" src="jquery/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="toastr/toastr.min.js"></script>
+    <script>
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+    </script>
 </head>
 <body>
     <div class="create">
@@ -26,23 +48,10 @@
                 <label></label>
                 <input type="submit" value="Send" required>
             </fieldset>
-
-            <script>
-                $("#create").submit(function(event) {
-                    event.preventDefault();
-                    const request = new Request("actions/insert.php", {
-                        method: "POST",
-                        body: new FormData( document.querySelector("form") )
-                    });
-                    fetch(request).then( response => {
-                        $("#create").trigger('reset'); //
-                    })
-                });
-            </script>
         </form>
     </div>
 
-    <div class="read">
+    <div id="read">
         <fieldset>
             <legend>Read Persons</legend>
             <table>
@@ -81,5 +90,20 @@
             </table>
         </fieldset>
     </div>
+
+    <script>
+        $("#create").submit(function(event) {
+            event.preventDefault();
+            const request = new Request("actions/insert.php", {
+                method: "POST",
+                body: new FormData( document.querySelector("form") )
+            });
+            fetch(request).then( response => {
+                toastr["success"]("Registered!", "Success")
+                $("#create").trigger('reset');
+                $("#read").load(" #read");
+            })
+        });
+    </script>
 </body>
 </html>
